@@ -1,27 +1,25 @@
-image: docker:latest
-
-services:
-  - docker:dind
+image: node:14
 
 stages:
   - build
   - test
 
 variables:
-  DOCKER_DRIVER: overlay2
+  NODE_ENV: 'development'
+
+cache:
+  paths:
+    - node_modules/
 
 before_script:
-  - docker info
+  - npm install
 
 build:
   stage: build
   script:
     - echo "Building the application"
-    - docker build -t my-app .
-
+    
 test:
   stage: test
   script:
     - npm test
-
-
