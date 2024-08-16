@@ -1,0 +1,25 @@
+stages:
+  - build
+  - test
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+  - docker build -t mon-app .
+
+build:
+  stage: build
+  script:
+    - echo "Build de l'application Docker"
+    - docker build -t mon-app .
+
+test:
+  stage: test
+  script:
+    - echo "Tests non définis"
+
