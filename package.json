@@ -1,0 +1,11 @@
+{
+  "name": "mon-app",
+  "version": "1.0.0",
+  "description": "Une application Node.js simple",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Aucun test défini\" && exit 0",
+    "start": "node index.js"
+  },
+  "dependencies": {}
+}
