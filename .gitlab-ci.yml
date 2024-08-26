@@ -1,4 +1,4 @@
-image: docker:latest
+image: node:14
 
 services:
   - docker:dind
