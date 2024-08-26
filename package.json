@@ -4,6 +4,7 @@
   "description": "Une application Node.js simple",
   "main": "index.js",
   "scripts": {
+    "build": "echo \"Aucun build défini\" && exit 0",
     "test": "echo \"Aucun test défini\" && exit 0",
     "start": "node index.js"
   },
