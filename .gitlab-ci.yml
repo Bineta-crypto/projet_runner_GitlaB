@@ -1,8 +1,12 @@
-image: node:14
+image: docker:latest
 
+services:
+  - docker:dind
+      
 stages:
   
   - build
+  - build_image
   - test
 
 cache:
@@ -11,6 +15,10 @@ cache:
 
 variables:
   NODE_ENV: 'development'
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  -docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
 
 
 build_application:
@@ -22,8 +30,22 @@ build_application:
     paths:
       - dist/
 
+
+build_image:
+  stage: build
+  script:
+    -docker build -t app_js .
+    -docker tag app_js $CI_REGISTRY_IMAGE:latest
+    -docker push $CI_REGISTRY_IMAGE:latest
+    
+  only:
+    - main
+
 test_application:
   stage: test
   script:
     - echo "Running tests"
-    - npm test
+    - docker run app_js npm test
+
+  only:
+   - main
