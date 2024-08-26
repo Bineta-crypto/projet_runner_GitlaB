@@ -18,6 +18,7 @@ build:
   stage: build
   script:
     - echo "Building the application"
+    - npm run build
     
 test:
   stage: test
