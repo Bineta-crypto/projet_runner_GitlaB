@@ -1,57 +1,50 @@
-image: docker:latest
+image: docker:latest  # Utiliser une image Docker qui contient Docker
 
 services:
-  - docker:dind
+  - docker:dind  # Activer le service Docker-in-Docker
 
 stages:
-  
   - build
   - build_image
   - test
 
-cache:
-  paths:
-    - node_modules/
-
 variables:
-  NODE_ENV: 'development'
   DOCKER_DRIVER: overlay2
-
-before_script:
-  - docker info
-  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-
+  CI_REGISTRY: registry.gitlab.com
+  CI_REGISTRY_USER: $CI_REGISTRY_USER
+  CI_REGISTRY_PASSWORD: $CI_REGISTRY_PASSWORD
 
 build_application:
-  image: node:14
+  image: node:14  # Utiliser l'image Node.js pour le build
   stage: build
   script:
     - echo "Building the application"
+    - npm install
     - npm run build
   artifacts:
     paths:
       - dist/
 
-
 build_image:
-
-
-  stage: build
-  
+  stage: build_image
   script:
-    #- docker build -t app_js .
-    #- docker tag app_js $CI_REGISTRY_IMAGE:latest
+    - docker info  # Vérifier que Docker est installé et fonctionnel
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - docker build -t $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:latest
-    
   only:
     - main
 
 test_application:
+  image: node:14  # Utiliser l'image Node.js pour les tests
   stage: test
   script:
     - echo "Running tests"
-    - docker run app_js npm test
+    - npm test
 
-  only:
-   - main
+
+
+
+
+
+
