@@ -34,8 +34,9 @@ build_image:
   stage: build
   
   script:
-    - docker build -t app_js .
-    - docker tag app_js $CI_REGISTRY_IMAGE:latest
+    #- docker build -t app_js .
+    #- docker tag app_js $CI_REGISTRY_IMAGE:latest
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:latest
     
   only:
