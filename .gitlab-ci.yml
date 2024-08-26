@@ -1,4 +1,8 @@
-      
+image: docker:latest
+
+services:
+  - docker:dind
+
 stages:
   
   - build
@@ -30,10 +34,7 @@ build_application:
 
 
 build_image:
-  image: docker:latest
 
-  services:
-  - docker:dind
 
   stage: build
   
