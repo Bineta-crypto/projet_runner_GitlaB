@@ -1,26 +1,37 @@
-image: node:14
+image: node:16
 
 stages:
+  - install
   - build
   - test
-
-variables:
-  NODE_ENV: 'development'
 
 cache:
   paths:
     - node_modules/
 
-before_script:
-  - npm install
+variables:
+  NODE_ENV: 'development'
 
-build:
+install_dependencies:
+  stage: install
+  script:
+    - echo "Installing dependencies"
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+build_application:
   stage: build
   script:
     - echo "Building the application"
     - npm run build
-    
-test:
+  artifacts:
+    paths:
+      - dist/
+
+test_application:
   stage: test
   script:
+    - echo "Running tests"
     - npm test
