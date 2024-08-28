@@ -4,7 +4,7 @@
   "description": "Une application Node.js simple",
   "main": "index.js",
   "scripts": {
-    "build": "echo \"Aucun build défini\" && exit 0",
+    "build": "webpack --config webpack.config.js",
     "test": "echo \"Aucun test défini\" && exit 0",
     "start": "node index.js"
   },
