@@ -20,6 +20,7 @@ build_application:
   script:
     - echo "Building the application"
     - npm install
+    - npm install --save-dev babel-loader @babel/core @babel/preset-env
     - npm run build
   artifacts:
     paths:
