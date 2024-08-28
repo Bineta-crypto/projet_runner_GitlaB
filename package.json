@@ -8,5 +8,9 @@
     "test": "echo \"Aucun test défini\" && exit 0",
     "start": "node index.js"
   },
-  "dependencies": {}
+
+  
+  "dependencies": { 
+    "webpack": "^5.x.x",
+    "webpack-cli": "^4.x.x"}
 }
