@@ -5,12 +5,13 @@ services:
 
 stages:
   - build
-  - build_image
   - test
-
+  - build_image
+  - deploy
 variables:
   DOCKER_DRIVER: overlay2
-  CI_REGISTRY: registry.gitlab.com
+  #CI_REGISTRY_IMAGE: registry.gitlab.com/etude/tmp
+  CI_PROJECT_PATH: CI_PROJECT_PATH
   CI_REGISTRY_USER: $CI_REGISTRY_USER
   CI_REGISTRY_PASSWORD: $CI_REGISTRY_PASSWORD
 
@@ -22,27 +23,51 @@ build_application:
     - npm install
     - npm install --save-dev babel-loader @babel/core @babel/preset-env
     - npm run build
+  tags:
+    - runner1
+ 
   artifacts:
     paths:
       - dist/
-
-build_image:
-  stage: build_image
-  script:
-    - docker info  # Vérifier que Docker est installé et fonctionnel
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
-    - docker build -t $CI_REGISTRY_IMAGE:latest .
-    - docker push $CI_REGISTRY_IMAGE:latest
-  only:
-    - main
 
 test_application:
   image: node:14  # Utiliser l'image Node.js pour les tests
   stage: test
   script:
+    - echo "Installing dependencies"
+    - npm install
     - echo "Running tests"
     - npm test
+  tags:
+    - runner1
 
+build_image:
+  stage: build_image
+  script:
+    - docker info  # Vérifier que Docker est installé et fonctionnel
+    - docker buildx create --use  # Créer et utiliser un builder avec Buildx
+    - docker buildx inspect --bootstrap  # Assurer que Buildx est prêt
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY_IMAGE"
+    #registry.gitlab.com/username/projectname
+    #- LOWERCASE_PROJECT_PATH=$(echo "$CI_PROJECT_PATH" | tr '[:upper:]' '[:lower:]')
+    - docker buildx build --platform linux/amd64,linux/arm64 --push -t registry.gitlab.com/etude/tmp:latest .
+ 
+
+  # Construire et pousser l'image avec buildx
+  tags:
+    - runner-docker
+  only:
+    - main
+
+deploy_application:
+  image: docker:latest
+  stage: deploy
+  script:
+    - echo "Deploying the application"
+    - docker pull $CI_REGISTRY_IMAGE:latest1
+    - docker run -d -p 80:80 $CI_REGISTRY_IMAGE:latest1
+  tags:
+    - runner-docker
 
 
 
