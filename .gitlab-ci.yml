@@ -53,8 +53,8 @@ build_image:
     - docker buildx build --platform linux/amd64,linux/arm64 --push -t registry.gitlab.com/binta9619/dl:latest .
 
   # Construire et pousser l'image avec buildx
-  #tags:
-   # - runner-docker
+  tags:
+   - runner-docker
   only:
     - main
 
@@ -65,8 +65,8 @@ deploy_application:
     - echo "Deploying the application"
     - docker pull $CI_REGISTRY_IMAGE:latest1
     - docker run -d -p 80:80 $CI_REGISTRY_IMAGE:latest1
-  #tags:
-   # - runner-docker
+  tags:
+   - runner-docker
 
 
 
