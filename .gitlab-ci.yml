@@ -63,8 +63,8 @@ deploy_application:
   stage: deploy
   script:
     - echo "Deploying the application"
-    - docker pull $CI_REGISTRY_IMAGE:latest
-    - docker run -d -p 80:80 $CI_REGISTRY_IMAGE:latest
+    - docker pull registry.gitlab.com/binta9619/dl:latest
+    - docker run -d -p 80:80 registry.gitlab.com/binta9619/dl:latest
   tags:
    - runner-docker
 
