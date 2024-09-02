@@ -23,8 +23,8 @@ build_application:
     - npm install
     - npm install --save-dev babel-loader @babel/core @babel/preset-env
     - npm run build
-  #tags:
-    #- runner1
+  tags:
+    - runner1
  
   artifacts:
     paths:
@@ -38,8 +38,8 @@ test_application:
     - npm install
     - echo "Running tests"
     - npm test
-  #tags:
-    #- runner1
+  tags:
+    - runner1
 
 build_image:
   stage: build_image
