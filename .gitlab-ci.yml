@@ -49,9 +49,8 @@ build_image:
     - docker buildx inspect --bootstrap  # Assurer que Buildx est prêt
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY_IMAGE"
     #registry.gitlab.com/username/projectname
-    #- LOWERCASE_PROJECT_PATH=$(echo "$CI_PROJECT_PATH" | tr '[:upper:]' '[:lower:]')
-    - docker buildx build --platform linux/amd64,linux/arm64 --push -t registry.gitlab.com/etude/tmp:latest .
- 
+    #- docker buildx build --platform linux/amd64,linux/arm64 --push -t registry.gitlab.com/etude/tmp:latest .
+    - docker buildx build --platform linux/amd64,linux/arm64 --push -t registry.gitlab.com/binta9619/DL:latest .
 
   # Construire et pousser l'image avec buildx
   tags:
